@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS anpr_db;
+USE anpr_db;
+
+CREATE TABLE IF NOT EXISTS plate_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    plate_number VARCHAR(20) NOT NULL,
+    confidence FLOAT NOT NULL,
+    timestamp DATETIME NOT NULL
+);

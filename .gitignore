@@ -1,0 +1,27 @@
+# Environment & Credentials
+.env
+*.env.local
+
+# Python Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runs & Outputs
+runs/
+outputs/
+debug_*.jpg
+debug_*.png
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# Large Datasets (optional local exclusion)
+*.zip
+*.zip.*
+data/
+venv/
+.venv/
+node_modules/
+
