@@ -49,7 +49,38 @@ def export_plate_logs_to_csv(output_filepath: Path = None) -> Path:
         df["time"] = df["timestamp"].dt.strftime("%H:%M:%S")
         df["hour"] = df["timestamp"].dt.hour
         df["day_name"] = df["timestamp"].dt.day_name()
+        df["day_type"] = df["timestamp"].dt.dayofweek.apply(lambda x: "Weekend" if x >= 5 else "Weekday")
         df["confidence_percent"] = (df["confidence"] * 100).round(2)
+
+        # Traffic Period Categorization
+        def get_traffic_period(hour):
+            if 6 <= hour < 11:
+                return "Morning Rush (06:00 - 11:00)"
+            elif 11 <= hour < 16:
+                return "Afternoon (11:00 - 16:00)"
+            elif 16 <= hour < 21:
+                return "Evening Rush (16:00 - 21:00)"
+            else:
+                return "Night (21:00 - 06:00)"
+
+        df["traffic_period"] = df["hour"].apply(get_traffic_period)
+
+        # Confidence Quality Tier
+        def get_confidence_tier(conf):
+            if conf >= 0.90:
+                return "High (>=90%)"
+            elif conf >= 0.75:
+                return "Moderate (75-89%)"
+            else:
+                return "Low (<75%)"
+
+        df["confidence_tier"] = df["confidence"].apply(get_confidence_tier)
+
+        # State/Region Extraction (e.g. TN, MH, DL, KA)
+        known_states = {"TN": "Tamil Nadu", "MH": "Maharashtra", "DL": "Delhi", "KA": "Karnataka", "HR": "Haryana", "KL": "Kerala", "AP": "Andhra Pradesh", "TS": "Telangana", "UP": "Uttar Pradesh"}
+        df["state_code"] = df["plate_number"].str[:2].str.upper()
+        df["state_name"] = df["state_code"].apply(lambda code: known_states.get(code, "Other / International"))
+
 
         # Ensure output directory exists
         output_filepath.parent.mkdir(parents=True, exist_ok=True)
