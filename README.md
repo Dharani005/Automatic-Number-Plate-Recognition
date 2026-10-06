@@ -1,39 +1,68 @@
-# ANPR & Vehicle Logging System — Starter Scaffold
+# Automatic Number Plate Recognition (ANPR) & Surveillance Pipeline
 
-## Folder structure
+A production-ready End-to-End Automatic Number Plate Recognition (ANPR) system featuring **YOLOv8 Detection**, **PaddleOCR Multi-Variant Recognition**, parameterized **MySQL Logging**, and rich **Power BI Business Intelligence & Surveillance Analytics**.
+
+---
+
+## 🚀 Key Features
+- **Accurate Detection**: YOLOv8 model for detecting vehicle license plates with automatic confidence thresholds.
+- **Robust OCR Recognition**: PaddleOCR integration with multi-variant image preprocessing (grayscale, contrast normalization, bilateral filtering, upscaling, sharpening).
+- **Relational Storage**: MySQL parameterized logging with automatic timestamping and schema validation.
+- **Power BI Integration**: Automatic 14-dimension CSV exporter and realistic synthetic dataset generator for building traffic surveillance and frequency dashboards.
+
+---
+
+## 📁 Project Structure
 ```
 anpr_project/
-├── data/
-│   ├── images/       # put your dataset images here
-│   └── labels/        # YOLO-format .txt labels here
-├── models/             # trained/fine-tuned weights go here
+├── config.py                 # Centralized configuration & environment loader
+├── POWER_BI_GUIDE.md         # Comprehensive Power BI Dashboard build guide
+├── requirements.txt          # Python package dependencies
+├── anpr_db.sql               # Database schema definition
+├── models/
+│   └── best.pt               # Trained YOLO license plate model weights
 ├── scripts/
-│   └── test_setup.py   # Step 1: sanity check
-├── outputs/            # detection results, logs
-└── requirements.txt
+│   ├── detect_and_log.py     # Main end-to-end pipeline runner
+│   ├── export_csv.py         # 14-column enriched CSV exporter for Power BI
+│   ├── seed_database.py      # Realistic mock traffic data generator
+│   └── train.py              # YOLOv8 fine-tuning script
+├── src/
+│   ├── database.py           # MySQL connection and insert routines
+│   ├── detector.py           # YOLO model inference wrapper
+│   ├── ocr_engine.py         # PaddleOCR multi-variant recognition
+│   ├── preprocessor.py       # Computer Vision image enhancement pipeline
+│   └── utils.py              # Image/video loaders and geometry helpers
+├── outputs/                  # Exported CSVs and diagnostic detection crops
+└── tests/                    # Unit and integration test suite
 ```
 
-## Step 1 (today): confirm environment works
-```bash
+---
+
+## ⚙️ Quick Start
+
+### 1. Environment Setup
+```powershell
 pip install -r requirements.txt
-python scripts/test_setup.py path/to/any_car_photo.jpg
 ```
-This uses the pretrained YOLOv8n (COCO classes) — just to prove detection,
-cropping, and saving works before you touch the plate dataset.
 
-## Step 2 (this week): get a plate dataset
-Go to Roboflow Universe: https://universe.roboflow.com and search
-"license plate detection". Pick a project with a few hundred+ images,
-export in **YOLOv8 format**, and drop the images/labels into
-`data/images/` and `data/labels/`.
+### 2. Configure Database
+Copy `.env.example` to `.env` and configure your MySQL credentials:
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=anpr_db
+```
 
-## Step 3 (next): fine-tune YOLOv8 on plates
-Once the dataset is in place, we'll write `scripts/train.py` to fine-tune
-`yolov8n.pt` on just the "license_plate" class.
+### 3. Run ANPR Pipeline on an Image or Video
+```powershell
+python scripts/detect_and_log.py test_car.jpg
+```
 
-## Step 4: OCR + MySQL logging
-Crop detected plates → preprocess → EasyOCR → insert (plate, timestamp)
-into MySQL.
-
-## Step 5: Power BI dashboard
-Connect Power BI to the MySQL table for entry/exit frequency and alerts.
+### 4. Generate Data & Build Power BI Dashboard
+To generate 500+ realistic traffic logs and export an enriched CSV for Power BI:
+```powershell
+python scripts/seed_database.py --count 500
+```
+For complete DAX formulas, visual layouts, and step-by-step dashboard creation, see [POWER_BI_GUIDE.md](file:///c:/Users/ELCOT/Desktop/anpr_project/POWER_BI_GUIDE.md).
