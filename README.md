@@ -1,4 +1,4 @@
-# Automatic Number Plate Recognition (ANPR) & Surveillance Pipeline
+# Automatic Number Plate Recognition (ANPR) & Vehicle Logging System
 
 A production-ready End-to-End Automatic Number Plate Recognition (ANPR) system featuring **YOLOv8 Detection**, **PaddleOCR Multi-Variant Recognition**, parameterized **MySQL Logging**, and rich **Power BI Business Intelligence & Surveillance Analytics**.
 
@@ -16,7 +16,6 @@ A production-ready End-to-End Automatic Number Plate Recognition (ANPR) system f
 ```
 anpr_project/
 ├── config.py                 # Centralized configuration & environment loader
-├── POWER_BI_GUIDE.md         # Comprehensive Power BI Dashboard build guide
 ├── requirements.txt          # Python package dependencies
 ├── anpr_db.sql               # Database schema definition
 ├── models/
@@ -65,4 +64,4 @@ To generate 500+ realistic traffic logs and export an enriched CSV for Power BI:
 ```powershell
 python scripts/seed_database.py --count 500
 ```
-For complete DAX formulas, visual layouts, and step-by-step dashboard creation, see [POWER_BI_GUIDE.md](file:///c:/Users/ELCOT/Desktop/anpr_project/POWER_BI_GUIDE.md).
+
