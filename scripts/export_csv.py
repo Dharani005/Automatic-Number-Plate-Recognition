@@ -81,6 +81,32 @@ def export_plate_logs_to_csv(output_filepath: Path = None) -> Path:
         df["state_code"] = df["plate_number"].str[:2].str.upper()
         df["state_name"] = df["state_code"].apply(lambda code: known_states.get(code, "Other / International"))
 
+        # Vehicle Status (Flagged / Authorized / Visitor)
+        def get_vehicle_status(plate):
+            if plate in ['DL 3C AB 9012', 'MH 04 AB 0001', 'GENMERCANLAR']:
+                return 'Flagged'
+            elif any(code in plate for code in ['KA', 'MH', 'TN']):
+                return 'Authorized'
+            else:
+                return 'Visitor'
+
+        df["vehicle_status"] = df["plate_number"].apply(get_vehicle_status)
+
+        # Gate Identification (Simulated Gate 01 vs Gate 02)
+        df["gate_id"] = df["id"].apply(lambda x: "Gate 01" if x % 2 == 0 else "Gate 02")
+
+        # Confidence Bracket matching anpr_db.sql
+        def get_confidence_bracket(conf):
+            if conf >= 0.95:
+                return '>95% High'
+            elif conf >= 0.85:
+                return '85-95% Medium'
+            else:
+                return '<85% Low'
+
+        df["confidence_bracket"] = df["confidence"].apply(get_confidence_bracket)
+
+
 
         # Ensure output directory exists
         output_filepath.parent.mkdir(parents=True, exist_ok=True)
