@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS plate_logs (
     timestamp DATETIME NOT NULL
 );
 
+CREATE OR REPLACE VIEW v_plate_analytics AS
 SELECT 
     id,
     plate_number,
@@ -19,8 +20,8 @@ SELECT
     HOUR(timestamp) AS log_hour,
     DAYNAME(timestamp) AS day_of_week,
     CASE 
-        WHEN plate_number IN ('DL 3C AB 9012', 'MH 04 AB 0001') THEN 'Flagged'
-        WHEN plate_number LIKE '%KA%' OR plate_number LIKE '%MH%' THEN 'Authorized'
+        WHEN plate_number IN ('DL 3C AB 9012', 'MH 04 AB 0001', 'GENMERCANLAR') THEN 'Flagged'
+        WHEN plate_number LIKE '%KA%' OR plate_number LIKE '%MH%' OR plate_number LIKE '%TN%' THEN 'Authorized'
         ELSE 'Visitor'
     END AS vehicle_status,
     CASE 
