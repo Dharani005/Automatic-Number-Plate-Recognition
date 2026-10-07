@@ -65,4 +65,4 @@ To generate 500+ realistic traffic logs and export an enriched CSV for Power BI:
 ```powershell
 python scripts/seed_database.py --count 500
 ```
-For complete DAX formulas, visual layouts, and step-by-step dashboard creation, see [POWER_BI_GUIDE.md](file:///c:/Users/ELCOT/Desktop/anpr_project/POWER_BI_GUIDE.md).
+
